@@ -16,7 +16,7 @@
             "js/content.js"
         ],
         "css": [
-            "css/insite.css"
+            "css/main.css"
         ],
         "run_at": "document_end"
     }],
