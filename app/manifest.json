@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "All-n-Beyond",
     "version": "1.2",
-    "description": "Recognize dark patterns in online stores",
+    "description": "Recognize dark patterns in online stores  and websites",
     "action": {
         "default_popup": "popup.html"
     },
