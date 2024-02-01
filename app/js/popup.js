@@ -24,3 +24,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     document.getElementsByClassName("number")[0].textContent = request.count;
   }
 });
+
+
+
+

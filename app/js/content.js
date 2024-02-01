@@ -10,85 +10,83 @@ const descriptions = {
 };
 
 function scrape() {
-  // website has already been analyzed
-  if (document.getElementById("insite_count")) {
+
+  if (document.getElementById("anb_count")) {
     return;
   }
 
-  // aggregate all DOM elements on the page
-  let elements = segments(document.body);
-  let filtered_elements = [];
+  const elements = getFilteredElements(document.body);
 
-  for (let i = 0; i < elements.length; i++) {
-    let text = elements[i].innerText.trim().replace(/\t/g, " ");
-    if (text.length == 0) {
-      continue;
-    }
-    filtered_elements.push(text);
-  }
+  fetchDarkPatterns(elements)
+    .then(processDarkPatterns)
+    .catch(handleError);
+}
 
-  // post to the web server
-  fetch(endpoint, {
+function getFilteredElements(body) {
+  const elements = segments(body);
+  return elements
+    .map((element) => element.innerText.trim().replace(/\t/g, " "))
+    .filter((text) => text.length > 0);
+}
+
+function fetchDarkPatterns(filteredElements) {
+  return fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ tokens: filtered_elements }),
+    body: JSON.stringify({ tokens: filteredElements }),
   })
-    .then((resp) => resp.json())
-    .then((data) => {
-      data = data.replace(/'/g, '"');
-      json = JSON.parse(data);
-      let dp_count = 0;
-      let element_index = 0;
+    .then((resp) => resp.json());
+}
 
-      for (let i = 0; i < elements.length; i++) {
-        let text = elements[i].innerText.trim().replace(/\t/g, " ");
-        if (text.length == 0) {
-          continue;
-        }
+function processDarkPatterns(data) {
+  data = data.replace(/'/g, '"');
+  const json = JSON.parse(data);
 
-        if (json.result[i] !== "Not Dark") {
-          highlight(elements[element_index], json.result[i]);
-          dp_count++;
-        }
-        element_index++;
-      }
+  let dpCount = 0;
+  let elementIndex = 0;
 
-      // store number of dark patterns
-      let g = document.createElement("div");
-      g.id = "insite_count";
-      g.value = dp_count;
-      g.style.opacity = 0;
-      g.style.position = "fixed";
-      document.body.appendChild(g);
-      sendDarkPatterns(g.value);
-    })
-    .catch((error) => {
-      alert(error);
-      alert(error.stack);
-    });
+  const elements = segments(document.body);
+  elements.forEach((element) => {
+    const text = element.innerText.trim().replace(/\t/g, " ");
+    if (text.length > 0 && json.result[elementIndex] !== "Not Dark") {
+      highlight(element, json.result[elementIndex]);
+      dpCount++;
+    }
+    elementIndex++;
+  });
+
+  storeDarkPatternsCount(dpCount);
 }
 
 function highlight(element, type) {
-  element.classList.add("insite-highlight");
+  element.classList.add("anb-highlight");
 
-  let body = document.createElement("span");
-  body.classList.add("insite-highlight-body");
+  const body = document.createElement("span");
+  body.classList.add("anb-highlight-body");
 
-  /* header */
-  let header = document.createElement("div");
+  const header = document.createElement("div");
   header.classList.add("modal-header");
-  let headerText = document.createElement("h1");
+  const headerText = document.createElement("h1");
   headerText.innerHTML = type + " Pattern";
   header.appendChild(headerText);
   body.appendChild(header);
 
-  /* content */
-  let content = document.createElement("div");
+  const content = document.createElement("div");
   content.classList.add("modal-content");
   content.innerHTML = descriptions[type];
   body.appendChild(content);
 
   element.appendChild(body);
+}
+
+function storeDarkPatternsCount(number) {
+  const g = document.createElement("div");
+  g.id = "anb_count";
+  g.value = number;
+  g.style.opacity = 0;
+  g.style.position = "fixed";
+  document.body.appendChild(g);
+  sendDarkPatterns(number);
 }
 
 function sendDarkPatterns(number) {
@@ -98,13 +96,20 @@ function sendDarkPatterns(number) {
   });
 }
 
+function handleError(error) {
+  console.error(error);
+  console.error(error.stack);
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === "analyze_site") {
     scrape();
   } else if (request.message === "popup_open") {
-    let element = document.getElementById("insite_count");
+    const element = document.getElementById("anb_count");
     if (element) {
       sendDarkPatterns(element.value);
     }
   }
 });
+
+
