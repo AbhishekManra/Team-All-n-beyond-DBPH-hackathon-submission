@@ -1,6 +1,6 @@
 .anb-highlight {
     position: relative;
-    background: #27ae60; 
+    background: #00131f;
     border-radius: 5px;
     transition: background 0.3s ease;
 }
@@ -11,7 +11,7 @@
     margin: 0;
     width: 250px;
     color: #ffffff;
-    background-color: #2c3e50; 
+    background-color: #2c3e50;
     z-index: 1;
     bottom: 125%;
     left: 50%;
@@ -20,37 +20,51 @@
     opacity: 0;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.anb-highlight-body .modal-header {
+.anb-highlight .modal-header {
     align-items: center;
     text-align: center;
     background-color: #3498db;
-    padding: 8px; 
+    padding: 8px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.anb-highlight-body .modal-header h1 {
+.anb-highlight .modal-header h1 {
     color: #FFFFFF;
     font-size: 18px;
     font-weight: 500;
     margin: 0;
 }
 
-.anb-highlight-body .modal-content {
-    padding: 12px; 
+.anb-highlight .modal-content {
+    padding: 12px;
     font-size: 14px;
     font-weight: 300;
     color: #ecf0f1;
 }
 
 .anb-highlight:hover {
-    background: #2ecc71; 
+    background: #00131f;
 }
 
 .anb-highlight:hover .anb-highlight-body {
     visibility: visible;
     opacity: 1;
+}
+
+.anb-highlight.analyze-scanning {
+    animation: scan 2s linear infinite;
+}
+
+
+@keyframes scan {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
 }

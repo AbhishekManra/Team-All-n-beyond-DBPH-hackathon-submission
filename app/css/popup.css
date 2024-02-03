@@ -2,7 +2,7 @@ html, body {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
     margin: 0;
-    min-height: 180;
+    min-height: 180px; /* Corrected min-height value */
     width: 296px;
     color: #FFFFFF;
     background-color: #041F30;
@@ -22,19 +22,19 @@ button {
     background-color: #fa3939;
     border: none;
     font-size: 16px;
-    padding: 12px 12px;
-    margin: 8px 0px 8px 0px;
+    padding: 12px 16px; /* Increased padding for better button appearance */
+    margin: 8px 0;
     border-radius: 3px;
-    box-shadow: 0px 3px 2px 1px #00131f;
+    box-shadow: 0 3px 2px 1px #00131f;
     width: 100%;
     transition: background-color 0.2s ease;
 }
 
 button:active {
-    background-color: #41C46E;
+    background-color: #00131f;
 }
 
-a:link, a:visited, a:hover, a:active {
+a {
     color: #FFFFFF;
     text-decoration: none;
 }
@@ -42,37 +42,37 @@ a:link, a:visited, a:hover, a:active {
 .modal-header {
     align-items: center;
     text-align: center;
-    box-shadow: 0px 3px 2px 1px #00131f;
+    box-shadow: 0 3px 2px 1px #00131f;
     background-color: #05283D;
-    padding: 3px;
+    padding: 8px; /* Increased padding for better header appearance */
 }
 
 .modal-content {
-    padding: 0px 16px 0px 16px;
+    padding: 16px; /* Increased padding for better content appearance */
 }
 
 .modal-footer {
     text-align: center;
     font-size: 12px;
-    padding: 3px 3px 8px 3px;
+    padding: 8px; /* Increased padding for better footer appearance */
 }
 
 .container {
     background-color: #007df3;
-    margin: 8px 0px 8px 0px;
-    padding: 6px 14px 6px 14px;
+    margin: 8px 0;
+    padding: 12px 16px;
     border-radius: 3px;
-    box-shadow: 0px 3px 2px 1px #003cff;
+    box-shadow: 0 3px 2px 1px #003cff;
 }
 
 .container p {
-    margin: 0px;
+    margin: 0;
 }
 
 .label {
     color: #B8B8B8;
-    margin: 0px;
-    font-weight: 150;
+    margin: 0;
+    font-weight: 500; 
 }
 
 .number, .total-number {
@@ -83,5 +83,3 @@ a:link, a:visited, a:hover, a:active {
 .modal-footer a {
     color: #D8D8D8;
 }
-
-

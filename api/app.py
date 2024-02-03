@@ -31,7 +31,7 @@ def main():
         print(len(dark))
 
         message = '{ \'result\': ' + str(output) + ' }'
-        print(message)
+  
 
         json = jsonify(message)
 
