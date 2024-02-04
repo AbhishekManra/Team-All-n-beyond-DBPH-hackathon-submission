@@ -83,3 +83,7 @@ a {
 .modal-footer a {
     color: #D8D8D8;
 }
+
+.descriptions-container {
+    font-size: 12px;
+}
