@@ -46,7 +46,7 @@ function scrape() {
           continue;
         }
 
-        if (json.result[i] !== "Not Dark") {
+        if (json.result[i] !== "Not Dark" && json.result[i] !== undefined) {
           highlight(elements[element_index], json.result[i]);
           dp_count++;
         }
@@ -108,3 +108,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   }
 });
+
+

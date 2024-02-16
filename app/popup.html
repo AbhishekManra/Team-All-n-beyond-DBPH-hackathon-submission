@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
     <link rel="stylesheet" href="css/popup.css" type="text/css">
     <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link rel="stylesheet" href="css/crop.css" type="text/css">
 </head>
-
 
 <body>
     <div class="modal-header">
@@ -19,6 +19,9 @@
             <p class="number">0</p>
         </div>
         <button class="analyze-button" type="button">Burst Patterns</button>
+        <button id="report" class="report-button" type="button">Report</button>
+
+
         <div class="descriptions-container">
 
             <ul>
@@ -31,16 +34,18 @@
                 <li><strong>Forced Action:</strong> Compels extra tasks.</li>
             </ul>
         </div>
+        <div id="cropperModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="cropperContainer"></div>
+                <button id="cropButton">Crop Image</button>
+            </div>
+        </div>
     </div>
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
     <script src="js/popup.js"></script>
-    <!-- <script>
-        $(document).ready(function () {
-            $('.anb-highlight').resizable({
-                handles: 'n, e, s, w, ne, se, sw, nw'
-            });
-    </script> -->
+    <script src="js/canva.js"></script>
+    <script src="js/capture.js"></script>
+    <script src="js/Crop.js"></script>
 
 
 
