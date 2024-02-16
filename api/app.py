@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from joblib import load
+from selenium import webdriver
+from bs4 import BeautifulSoup
 
-presence_classifier = load('presence_classifier.joblib')
+presence_classifier = load('presence_classifer.joblib')
 presence_vect = load('presence_vectorizer.joblib')
 category_classifier = load('category_classifier.joblib')
 category_vect = load('category_vectorizer.joblib')
@@ -36,6 +38,8 @@ def main():
         json = jsonify(message)
 
         return json
+
+
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)
