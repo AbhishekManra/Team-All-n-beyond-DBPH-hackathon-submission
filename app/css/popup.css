@@ -1,11 +1,13 @@
-html, body {
+html,
+body {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
     margin: 0;
-    min-height: 180px; 
+    min-height: 180px;
     width: 296px;
     color: #FFFFFF;
     background-color: #041F30;
+    
 }
 
 h1 {
@@ -44,18 +46,18 @@ a {
     text-align: center;
     box-shadow: 0 3px 2px 1px #00131f;
     background-color: #05283D;
-    padding: 8px; 
+    padding: 8px;
 }
 
 .modal-content {
-    padding: 16px; 
-    
+    padding: 16px;
+
 }
 
 .modal-footer {
     text-align: center;
     font-size: 12px;
-    padding: 8px; 
+    padding: 8px;
 }
 
 .container {
@@ -73,10 +75,11 @@ a {
 .label {
     color: #B8B8B8;
     margin: 0;
-    font-weight: 500; 
+    font-weight: 500;
 }
 
-.number, .total-number {
+.number,
+.total-number {
     color: #FFFFFF;
     font-size: 32px;
 }

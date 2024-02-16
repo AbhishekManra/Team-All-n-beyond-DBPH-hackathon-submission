@@ -138,3 +138,37 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
+document.getElementById('downloadDarkPatterns').addEventListener('click', function() {
+    fetch('http://127.0.0.1:5000/download_text', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to download dark patterns');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        // Create a new blob URL for the downloaded file
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a new anchor element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'dark_patterns.txt'; // Specify the filename
+        document.body.appendChild(a);
+
+        // Trigger a click event to start the download
+        a.click();
+
+        // Remove the anchor element
+        document.body.removeChild(a);
+
+        // Release the blob URL
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error occurred while downloading dark patterns. Please try again later.');
+    });
+});
