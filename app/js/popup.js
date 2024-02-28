@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.tabs.sendMessage(tabs[0].id, { message: "popup_open" });
     });
 
-
     var analyzeButton = document.getElementsByClassName("analyze-button")[0];
     if (analyzeButton) {
         analyzeButton.onclick = function () {
@@ -14,6 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
+    var toggle_btn = document.getElementsByClassName('toggle-css')[0];
+    if (toggle_btn) {
+        toggle_btn.onclick = function () {
+            chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { message: "toggle_css" });
+            });
+        }
+    }
 
     var linkElement = document.getElementsByClassName("link")[0];
     if (linkElement) {
@@ -25,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.message === "update_current_count") {
         var numberElement = document.getElementsByClassName("number")[0];
@@ -35,19 +41,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// function openReportPopup() {
-
-//     var popupWidth = 600;
-//     var popupHeight = 400;
-//     var left = (window.innerWidth - popupWidth) / 2;
-//     var top = (window.innerHeight - popupHeight) / 2;
-
-
-//     window.open('report.html', '_blank', 'width=' + popupWidth + ', height=' + popupHeight + ', top=' + top + ', left=' + left);
-// }
-
-
-// document.getElementById('report').addEventListener('click', openReportPopup);
 document.addEventListener('DOMContentLoaded', function () {
     const reportButton = document.getElementById('report');
     reportButton.addEventListener('click', reportDarkPatterns);
@@ -68,15 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('cropperModal');
         const cropperContainer = document.getElementById('cropperContainer');
 
-
         const img = new Image();
         img.onload = function () {
-
             cropperContainer.appendChild(img);
-
-
             modal.style.display = 'block';
-
 
             const cropper = new Cropper(img, {
                 aspectRatio: NaN,
@@ -84,23 +72,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 zoomable: false,
             });
 
-
             document.getElementById('cropButton').addEventListener('click', function () {
-
                 const canvas = cropper.getCroppedCanvas();
-
                 const croppedDataUrl = canvas.toDataURL('image/png');
 
-
                 modal.style.display = 'none';
-
-
-                sendData(croppedDataUrl, description);
+                extractTextAndSendData(croppedDataUrl, description);
             });
         };
 
-
         img.src = imageUrl;
+    }
+
+    function extractTextAndSendData(imageData, description) {
+        // Extract text from the image using Tesseract.js or other library
+        // Example:
+        // const text = extractTextFromImage(imageData);
+        // Then send the text along with other data to the Flask backend
+
+        // For now, send the imageData directly without text extraction
+        sendData(imageData, description);
     }
 
     function sendData(imageData, description) {
@@ -119,16 +110,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert(data.message);
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.log(error)
                 alert('Error occurred while reporting. Please try again later.');
             });
     }
 
-
     document.getElementsByClassName('close')[0].addEventListener('click', function () {
         document.getElementById('cropperModal').style.display = 'none';
     });
-
 
     window.onclick = function (event) {
         const modal = document.getElementById('cropperModal');
@@ -136,39 +125,4 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.display = 'none';
         }
     };
-});
-
-document.getElementById('downloadDarkPatterns').addEventListener('click', function() {
-    fetch('http://127.0.0.1:5000/download_text', {
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to download dark patterns');
-        }
-        return response.blob();
-    })
-    .then(blob => {
-        // Create a new blob URL for the downloaded file
-        const url = window.URL.createObjectURL(blob);
-
-        // Create a new anchor element
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'dark_patterns.txt'; // Specify the filename
-        document.body.appendChild(a);
-
-        // Trigger a click event to start the download
-        a.click();
-
-        // Remove the anchor element
-        document.body.removeChild(a);
-
-        // Release the blob URL
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error occurred while downloading dark patterns. Please try again later.');
-    });
 });

@@ -1,3 +1,5 @@
+var css_arr = [];
+var css_arr_len;
 const endpoint = "http:/127.0.0.1:5000/";
 const descriptions = {
   "Sneaking": "Coerces users to act in ways that they would not normally act by obscuring information.",
@@ -10,12 +12,12 @@ const descriptions = {
 };
 
 function scrape() {
-  // website has already been analyzed
+  
   if (document.getElementById("anb_count")) {
     return;
   }
 
-  // aggregate all DOM elements on the page
+ 
   let elements = segments(document.body);
   let filtered_elements = [];
 
@@ -27,7 +29,7 @@ function scrape() {
     filtered_elements.push(text);
   }
 
-  // post to the web server
+  
   fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,8 +54,9 @@ function scrape() {
         }
         element_index++;
       }
+      css_arr_len= dp_count;
 
-      // store number of dark patterns
+     
       let g = document.createElement("div");
       g.id = "anb_count";
       g.value = dp_count;
@@ -61,6 +64,7 @@ function scrape() {
       g.style.position = "fixed";
       document.body.appendChild(g);
       sendDarkPatterns(g.value);
+      processCssArrLen();
     })
     .catch((error) => {
       alert(error);
@@ -68,8 +72,55 @@ function scrape() {
     });
 }
 
+function processCssArrLen() {
+  console.log(css_arr_len);
+
+  let res = "";
+  for (let i = 0; i < css_arr_len; i++) {
+    res += valuesToHtmlString(css_arr[i].innerHTML, i);
+  }
+
+  
+  if (window.confirm("Do you want to download the reported HTML?")) {
+    saveHtmlStringToFile(res, "scan_result.html");
+  } else {
+    alert("Download cancelled.");
+  }
+}
+
+function valuesToHtmlString(html,index) {
+  let s = ""
+  s += `<h3 style="margin-bottom: 5px">${index}</h3>\n`
+  s += `<b>${html}</b>\n`
+  s += "<br> ---\n"
+  return s
+}
+
+function saveHtmlStringToFile(s, fileName) {
+  const blob = new Blob([s], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = url;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+
 function highlight(element, type) {
   element.classList.add("anb-highlight");
+
+  let parentElement = element.parentElement;
+  css_arr.push(parentElement);
+  
+  // Get the parent element's ID
+  let parentId = parentElement.id;
+
+  // Get computed CSS styles of the parent element
+  let parentComputedStyle = window.getComputedStyle(parentElement);
+
 
   let body = document.createElement("span");
   body.classList.add("anb-highlight-body");
@@ -110,3 +161,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 
+let cssVisible = true;
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.message === "toggle_css") {
+    
+    if (cssVisible) {
+      
+      for (let i = 0; i < css_arr_len; i++) {
+        css_arr[i].style.display = 'none';
+      }
+    } else {
+     
+      for (let i = 0; i < css_arr_len; i++) {
+        css_arr[i].style.display = '';
+      }
+    }
+    
+    
+    cssVisible = !cssVisible;
+  } else if (request.message === "popup_open") {
+    let element = document.getElementById("anb_count");
+    if (element) {
+      sendDarkPatterns(element.value);
+    }
+  }
+});

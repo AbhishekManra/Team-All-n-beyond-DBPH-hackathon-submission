@@ -18,30 +18,27 @@
             <p class="label">Total Patterns Bursted</p>
             <p class="number">0</p>
         </div>
+
+        <div class="checkbox-con toggle-css">
+            <input id="tog-cs" type="checkbox">
+        </div>
         <button class="analyze-button" type="button">Burst Patterns</button>
         <button id="report" class="report-button" type="button">Report</button>
-        <button id="downloadDarkPatterns">Download Stats</button>
+        <ul>
+            <li>
+                <a href="http://127.0.0.1:8080/" target="_blank">report with image?</a>
+            </li>
+        </ul>
 
-
-        <div class="descriptions-container">
-
-            <ul>
-                <li><strong>Sneaking:</strong> Tricks by hiding info.</li>
-                <li><strong>Urgency:</strong> Adds deadlines for appeal.</li>
-                <li><strong>Misdirection:</strong> Confuses to sway choice.</li>
-                <li><strong>Social Proof:</strong> Implies approval by others.</li>
-                <li><strong>Scarcity:</strong> Increases value by limiting.</li>
-                <li><strong>Obstruction:</strong> Makes tasks harder to discourage.</li>
-                <li><strong>Forced Action:</strong> Compels extra tasks.</li>
-            </ul>
-        </div>
-        <div id="cropperModal" class="modal">
+        <div id="cropperModal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <div id="cropperContainer"></div>
                 <button id="cropButton">Crop Image</button>
             </div>
         </div>
+
+
     </div>
     <script src="js/popup.js"></script>
     <script src="js/canva.js"></script>

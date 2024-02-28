@@ -60,6 +60,7 @@ def report():
 
         try:
             workbook = openpyxl.load_workbook('reports.xlsx')
+            csv_file_path = 'path/to/your/dataset.csv'
         except FileNotFoundError:
             workbook = openpyxl.Workbook()
 
@@ -67,45 +68,20 @@ def report():
         if worksheet.title != 'Reports':
             worksheet = workbook.create_sheet(title='Reports')
 
+        
         worksheet.append([description])
 
         image_stream = BytesIO(image_bytes)
 
         img = Image(image_stream)
-        worksheet.add_image(img, f'B{worksheet.max_row}')
+        worksheet.add_image(img, f'B{worksheet.max_row + 1}')
 
         workbook.save('reports.xlsx')
 
         return jsonify({'message': 'Report saved successfully.'})
 
 
-@app.route('/download_text', methods=['GET'])
-def download_text():
 
-    vocabulary_list = list(presence_vect.vocabulary_.keys())
-
-    vectorizer_detailed_info = {
-        'vocabulary': vocabulary_list,
-
-    }
-
-    vectorizer_summary = {
-        'vocabulary_size': len(vocabulary_list),
-
-    }
-
-    with open('vectorizer_detailed_info.json', 'w') as f:
-        json.dump(vectorizer_detailed_info, f, indent=4)
-
-    with open('vectorizer_summary.json', 'w') as f:
-        json.dump(vectorizer_summary, f, indent=4)
-
-    with ZipFile('information.zip', 'w') as zipf:
-        zipf.write('vectorizer_detailed_info.json',
-                   'vectorizer_detailed_info.json')
-        zipf.write('vectorizer_summary.json', 'vectorizer_summary.json')
-
-    return send_file('information.zip', as_attachment=True)
 
 
 if __name__ == '__main__':
